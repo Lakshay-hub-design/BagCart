@@ -1,0 +1,56 @@
+<%- include('./partials/header') %>
+<div class="w-full min-h-[calc(100vh-52px)] flex items-center justify-center bg-gray-100">
+  <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-sm text-center">
+    <h2 class="text-xl font-semibold mb-3">Scan to Pay</h2>
+    
+    <!-- QR Image -->
+    <img src="https://i.ibb.co/9vWkqZn/fake-qr.png" loading="lazy" alt="QR Code" class="mx-auto mb-4 w-48 h-48 object-contain">
+
+    <!-- Payment Info -->
+    <div class="text-left text-sm text-gray-600 mb-3">
+      <p><strong>Amount:</strong> ₹<%= total || 1999 %></p>
+      <p><strong>UPI ID:</strong> shopmate@ybl</p>
+    </div>
+
+    <!-- Pay Button -->
+    <button id="payBtn" onclick="simulatePayment()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      I have paid
+    </button>
+
+    <!-- Loading spinner -->
+    <div id="loading" class="hidden mt-3">
+      <svg class="animate-spin h-5 w-5 mx-auto text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+      </svg>
+      <p class="text-xs text-gray-500 mt-2">Verifying payment...</p>
+    </div>
+
+    <!-- Success Message -->
+    <div id="success" class="hidden mt-3 text-green-600 text-sm font-semibold">
+      ✅ Payment Successful! Redirecting...
+    </div>
+
+    <p class="text-xs text-gray-400 mt-3">Fake screen for demo purposes only</p>
+  </div>
+</div>
+
+<script>
+  function simulatePayment() {
+    document.getElementById("payBtn").classList.add("hidden");
+    document.getElementById("loading").classList.remove("hidden");
+
+    // Simulate 3s payment verification
+    setTimeout(() => {
+      document.getElementById("loading").classList.add("hidden");
+      document.getElementById("success").classList.remove("hidden");
+
+      // Redirect after 2 more seconds
+      setTimeout(() => {
+        window.location.href = "/users/cart/checkout";
+      }, 2000);
+
+    }, 3000);
+  }
+</script>
+<%- include('./partials/footer') %>

@@ -1,0 +1,169 @@
+<%- include('./partials/header') %>
+
+<% if (error.length > 0) { %>
+  <div class="absolute top-5 left-1/2 transform -translate-x-1/2 p-3 rounded-md bg-red-500 shadow-lg z-50">
+    <span class="text-white font-medium"><%= error %></span>
+  </div>
+<% } %>
+
+<div class="min-h-[calc(100vh-52px)] flex items-center justify-center bg-gradient-to-r from-blue-100 via-white to-blue-200 px-4 py-10">
+  <div class="w-full max-w-5xl bg-white/70 backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden grid md:grid-cols-2">
+
+    <!-- Left Section (Welcome) -->
+    <div class="bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex flex-col justify-center items-center p-8">
+      <h1 class="text-4xl font-bold mb-2">Welcome to <span class="text-yellow-300">BagCart</span></h1>
+      <p class="text-lg italic mb-6 text-center">“Carry Style. Carry You.”</p>
+      <div class="w-52 h-52">
+        <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_tfb3estd.json" background="transparent" speed="1" loop autoplay></lottie-player>
+      </div>
+    </div>
+
+    <!-- Right Section (Forms) -->
+    <div class="p-8 bg-white rounded-tr-2xl rounded-br-2xl">
+
+      <!-- Toggle Buttons -->
+      <div class="mb-6 flex justify-center gap-4">
+        <button onclick="showForm('login')" id="loginTab"
+          class="px-6 py-2 rounded-full bg-blue-500 text-white font-semibold shadow hover:bg-blue-600">Login</button>
+        <button onclick="showForm('register')" id="registerTab"
+          class="px-6 py-2 rounded-full bg-gray-200 text-gray-800 font-semibold shadow hover:bg-gray-300">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" action="/users/login" method="POST" class="form-tab">
+        <h2 class="text-2xl font-bold text-gray-800 mb-5 text-center">Login</h2>
+        <input type="email" name="email" placeholder="Email"
+          class="w-full mb-4 px-4 py-3 border rounded-lg bg-gray-100 focus:outline-blue-500" required />
+        <input type="password" name="password" placeholder="Password"
+          class="w-full mb-6 px-4 py-3 border rounded-lg bg-gray-100 focus:outline-blue-500" required />
+
+        <!-- Owner Mode -->
+        <div id="ownerSwitchContainer" class="hidden mb-4 p-3 rounded bg-yellow-100 text-yellow-800 text-sm text-center shadow">
+          <span>You are logging in as <strong>Owner</strong>.</span>
+          <button type="button" onclick="enableOwnerMode()" class="ml-2 text-blue-600 underline">Switch to Owner Login</button>
+        </div>
+
+        <button type="submit"
+          class="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full font-semibold shadow-md">Login</button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" action="/users/register" method="POST" class="form-tab hidden">
+        <h2 class="text-2xl font-bold text-gray-800 mb-5 text-center">Register</h2>
+
+        <div class="mb-4">
+          <input type="text" name="fullname" placeholder="Full Name"
+            class="w-full px-4 py-3 border rounded-lg bg-gray-100 focus:outline-blue-500 border" required />
+          <p id="fullnameError" class="text-red-500 text-sm mt-1 hidden"></p>
+        </div>
+        <div class="mb-4">
+          <input type="email" name="email" placeholder="Email"
+            class="w-full px-4 py-3 border rounded-lg bg-gray-100 focus:outline-blue-500" required />
+          <p id="emailError" class="text-red-500 text-sm mt-1 hidden"></p>
+        </div>
+        <div class="mb-6">
+          <input type="password" name="password" placeholder="Password"
+            class="w-full px-4 py-3 border rounded-lg bg-gray-100 focus:outline-blue-500" required />
+          <p id="passwordError" class="text-red-500 text-sm mt-1 hidden"></p>
+        </div>
+
+        <button type="submit"
+          class="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full font-semibold shadow-md">Create Account</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script>
+  function enableOwnerMode() {
+    const loginForm = document.getElementById("loginForm");
+    loginForm.action = "/owners/login";
+
+    const roleInput = document.createElement("input");
+    roleInput.type = "hidden";
+    roleInput.name = "role";
+    roleInput.value = "owner";
+    loginForm.appendChild(roleInput);
+
+    document.getElementById("ownerSwitchContainer").style.display = "none";
+    alert("Owner login mode enabled ✅");
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("owner") === "1") {
+    document.getElementById("ownerSwitchContainer").classList.remove("hidden");
+  }
+
+  function showForm(type) {
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const loginTab = document.getElementById("loginTab");
+    const registerTab = document.getElementById("registerTab");
+
+    if (type === "login") {
+      loginForm.classList.remove("hidden");
+      registerForm.classList.add("hidden");
+      loginTab.classList.replace("bg-gray-200", "bg-blue-500");
+      loginTab.classList.replace("text-gray-800", "text-white");
+      registerTab.classList.replace("bg-blue-500", "bg-gray-200");
+      registerTab.classList.replace("text-white", "text-gray-800");
+    } else {
+      loginForm.classList.add("hidden");
+      registerForm.classList.remove("hidden");
+      registerTab.classList.replace("bg-gray-200", "bg-blue-500");
+      registerTab.classList.replace("text-gray-800", "text-white");
+      loginTab.classList.replace("bg-blue-500", "bg-gray-200");
+      loginTab.classList.replace("text-white", "text-gray-800");
+    }
+  }
+
+  const regForm = document.getElementById("registerForm");
+  regForm.addEventListener("submit", function (e) {
+    const fullName = regForm.querySelector('input[name="fullname"]');
+    const email = regForm.querySelector('input[name="email"]');
+    const password = regForm.querySelector('input[name="password"]');
+
+    const fullNameError = document.getElementById("fullnameError");
+    const emailError = document.getElementById("emailError");
+    const passwordError = document.getElementById("passwordError");
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let isValid = true;
+
+    // Clear old errors
+    [fullNameError, emailError, passwordError].forEach(el => {
+      el.textContent = "";
+      el.classList.add("hidden");
+    });
+    [fullName, email, password].forEach(input => {
+      input.classList.remove("border-red-500");
+    });
+
+    // Validate fields
+    if (fullName.value.trim().length < 3) {
+      fullNameError.textContent = "Full name must be at least 3 characters.";
+      fullNameError.classList.remove("hidden");
+      fullName.classList.add("border-red-500");
+      isValid = false;
+    }
+
+    if (!emailRegex.test(email.value.trim())) {
+      emailError.textContent = "Enter a valid email address.";
+      emailError.classList.remove("hidden");
+      email.classList.add("border-red-500");
+      isValid = false;
+    }
+
+    if (password.value.length < 6) {
+      passwordError.textContent = "Password must be at least 6 characters.";
+      passwordError.classList.remove("hidden");
+      password.classList.add("border-red-500");
+      isValid = false;
+    }
+
+    if (!isValid) e.preventDefault();
+  });
+</script>
+
+<%- include('./partials/footer') %>

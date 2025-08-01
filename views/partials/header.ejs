@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BagCart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body class="font-['Poppins']">
+
+<% var loggedin = typeof loggedin !== "undefined" ? loggedin : true; %>
+
+<!-- Navbar -->
+<nav class="w-full px-4 sm:px-10 py-3 bg-white shadow sticky top-0 z-50">
+  <div class="flex items-center justify-between">
+    
+    <!-- Logo as link -->
+    <a href="/users/shop" class="text-xl font-semibold text-black hover:text-blue-600 transition">BagCart</a>
+
+    <% if (loggedin) { %>
+    <div class="flex sm:flex items-center gap-4 sm:gap-6">
+      
+      <!-- Shop link -->
+      
+      
+      <!-- Search bar for desktop -->
+      <div class="hidden sm:block">
+      <form action="/users/shop" method="GET" class="w-full sm:w-auto flex">
+        <input
+        type="text"
+        name="search"
+        placeholder="Search products..."
+        value="<%= typeof search !== 'undefined' ? search : '' %>"
+        class="w-full sm:w-64 border border-gray-300 px-4 py-2 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600 flex items-center justify-center">
+          <i class="ri-search-line text-lg"></i>
+        </button>
+      </form>
+      </div>
+
+      <a href="/users/shop" class="text-sm sm:text-base hover:text-blue-600 transition">Shop</a>
+
+      <!-- Account (username) with icon -->
+      <a href="/users/account" class="flex items-center gap-2 px-3 py-1 shadow text-sm sm:text-base hover:bg-gray-100 transition rounded-full">
+        <i class="ri-user-line text-lg"></i>
+        <span class="capitalize font-medium"><%= user.fullname %></span>
+      </a>
+
+      <!-- Cart -->
+      <a href="/users/cart" class="relative flex items-center gap-1 text-sm sm:text-base hover:text-blue-600 transition">
+        <i class="ri-shopping-cart-line text-2xl"></i>
+        <% if (user && user.cart && user.cart.length > 0) { %>
+          <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+            <%= user.cart.length %>
+          </span>
+        <% } %>
+      </a>
+
+    </div>
+    <% } %>
+  </div>
+  <% if (loggedin) { %>
+  <!-- Search bar for mobile -->
+  <div class="mt-3 sm:hidden">
+    <input
+      type="text"
+      placeholder="Search for products"
+      class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+  </div>
+  <% } %>
+</nav>
+
+</body>
+</html>

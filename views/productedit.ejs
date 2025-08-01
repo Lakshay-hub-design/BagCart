@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Product - <%= product.name %></title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+
+  <form action="/owners/editproduct/<%= product._id %>" method="POST" class="bg-white shadow-lg rounded-xl p-6 w-full max-w-md space-y-4">
+    <h2 class="text-2xl font-bold mb-4 text-center">Edit Product</h2>
+
+    <!-- Name -->
+    <div>
+      <label class="block font-semibold">Name</label>
+      <input type="text" name="name" value="<%= product.name %>" class="w-full border border-gray-300 rounded px-3 py-2 mt-1" required />
+    </div>
+
+    <!-- Price -->
+    <div>
+      <label class="block font-semibold">Price (₹)</label>
+      <input type="number" name="price" value="<%= product.price %>" class="w-full border border-gray-300 rounded px-3 py-2 mt-1" required />
+    </div>
+
+    <!-- Discount -->
+    <div>
+      <label class="block font-semibold">Discount (%)</label>
+      <input type="number" name="discount" value="<%= product.discount || 0 %>" class="w-full border border-gray-300 rounded px-3 py-2 mt-1" min="0" max="100" />
+    </div>
+
+    <!-- Submit -->
+    <div class="flex justify-between items-center mt-4">
+      <a href="/owners/admin" class="text-red-500 hover:underline">Cancel</a>
+      <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition">
+        Save Changes
+      </button>
+    </div>
+  </form>
+
+</body>
+</html>

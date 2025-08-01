@@ -1,0 +1,70 @@
+<%- include('./partials/header') %>
+
+<% if (success.length > 0) { %>
+  <div class="fixed top-5 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-md shadow-lg z-50">
+    <%= success %>
+  </div>
+<% } %>
+
+<div class="min-h-[calc(100vh-52px)] bg-gray-50 px-4 py-10">
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 sm:p-8 space-y-8">
+    
+    <!-- Title -->
+    <h2 class="text-3xl font-bold text-gray-800 border-b pb-2">My Account</h2>
+
+    <!-- User Info Section -->
+    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+      <!-- Profile Picture -->
+      <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
+        <% if (user.picture) { %>
+          <img src="<%= user.picture %>" alt="Profile" class="w-24 h-24 rounded-full object-cover border shadow" />
+        <% } else { %>
+          <div class="w-24 h-24 rounded-full bg-blue-500 flex items-center justify-center text-3xl text-white font-bold shadow">
+            <%= user.fullname[0] %>
+          </div>
+        <% } %>
+
+        <a href="/users/edit/<%= user._id %>" 
+           class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all text-sm sm:text-base">
+          Edit Profile
+        </a>
+      </div>
+
+      <!-- User Details -->
+      <div class="flex-1">
+        <h3 class="text-2xl font-semibold text-gray-800"><%= user.fullname %></h3>
+        <p class="text-gray-600 break-all"><%= user.email %></p>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="h-px bg-gray-300"></div>
+
+    <!-- Cart & Orders Summary -->
+    <div class="grid sm:grid-cols-2 gap-6 text-sm sm:text-base">
+      <!-- Cart Summary -->
+      <div>
+        <h4 class="text-lg font-semibold mb-2 text-gray-700">Cart Summary</h4>
+        <p>You have <strong><%= user.cart.length %></strong> item(s) in your cart.</p>
+        <a href="/users/cart" class="text-blue-600 underline inline-block mt-1 hover:text-blue-800">View Cart</a>
+      </div>
+
+      <!-- Orders -->
+      <div>
+        <h4 class="text-lg font-semibold mb-2 text-gray-700">Your Orders</h4>
+        <p>Check your order history and track deliveries.</p>
+        <a href="/users/orders" class="text-blue-600 underline inline-block mt-1 hover:text-blue-800">View All Orders</a>
+      </div>
+    </div>
+
+    <!-- Logout Button -->
+    <div class="pt-6 border-t">
+        <a href="/users/logout" type="submit" class="w-full sm:w-auto px-6 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 transition">
+          Logout
+        </a>
+    </div>
+    
+  </div>
+</div>
+
+<%- include('./partials/footer') %>

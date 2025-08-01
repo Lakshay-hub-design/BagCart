@@ -1,0 +1,97 @@
+<%- include('./partials/header') %>
+
+<% if(success.length > 0){ %>
+  <div class="fixed top-5 left-1/2 -translate-x-1/2 p-3 rounded-md bg-blue-500 z-50">
+    <span class="text-white"><%= success %></span>
+  </div>
+<% } %>
+
+<div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center px-4 sm:px-10 gap-3 sm:gap-6">
+
+<div class="w-full flex flex-col lg:flex-row px-4 sm:px-10 py-10 gap-6 relative">
+
+  <button onclick="toggleFilter()" class="lg:hidden sticky top-2 right-4 bg-gray-100 px-3 py-1 rounded shadow text-sm z-40">
+    ☰ Filters
+  </button>
+
+  <div id="filterPanel"
+    class="w-[95vw] max-w-sm lg:max-w-none lg:w-1/4 bg-white border p-4 rounded shadow-md
+           absolute lg:static top-10 left-1/2 lg:left-auto transform -translate-x-1/2 lg:transform-none z-40 hidden lg:block">
+
+    <div class="flex justify-between items-center mb-4 lg:hidden">
+      <h3 class="font-semibold">Filters</h3>
+      <button onclick="toggleFilter()" class="text-sm text-red-500">✕ Close</button>
+    </div>
+
+    <div class="mb-4">
+      <label class="font-semibold block mb-2">Sort by:</label>
+      <select class="w-full border px-2 py-1 rounded" id="sortBy" onchange="sortProducts(this.value)">
+        <option value="popular" <%= sortBy === 'popular' ? 'selected' : '' %>>Popular</option>
+        <option value="lowtohigh" <%= sortBy === 'lowtohigh' ? 'selected' : '' %>>Price: Low to High</option>
+        <option value="hightolow" <%= sortBy === 'hightolow' ? 'selected' : '' %>>Price: High to Low</option>
+        <option value="newest" <%= sortBy === 'newest' ? 'selected' : '' %>>Newest</option>
+      </select>
+    </div>
+
+    <div class="flex flex-col gap-2 mt-4 text-sm sm:text-base">
+      <a class="hover:text-blue-600 transition" href="/users/shop?filter=new&sort=<%= sortBy %>">🆕 New Collection</a>
+      <a class="hover:text-blue-600 transition" href="/users/shop?sort=<%= sortBy %>">🛒 All Products</a>
+      <a class="hover:text-blue-600 transition" href="/users/shop?filter=discounted&sort=<%= sortBy %>">💸 Discounted Products</a>
+    </div>
+  </div>
+
+  
+    <% if (products.length === 0) { %>
+      <div class="lg:w-3/4 w-full text-center text-gray-500">No products available.</div>
+    <% } else { %>
+      <div class="lg:w-3/4 w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <% products.forEach(function(product){ %>
+          <div class="relative border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white h-full flex flex-col">
+            <!-- Badges -->
+            <% if (product.isNew) { %>
+              <span class="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded">New</span>
+            <% } %>
+            <% if (product.discount > 0) { %>
+              <span class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded">₹<%= product.discount %> OFF</span>
+            <% } %>
+
+            <!-- Image -->
+            <div class="bg-[<%= product.bgcolor %>] p-3 flex-1 flex items-center justify-center">
+              <img class="w-full max-h-36 object-contain transition-transform duration-200 hover:scale-105"
+                src="<%= product.imagePath %>" loading="lazy" alt="<%= product.name %>" decoding="async" />
+            </div>
+
+            <!-- Info -->
+            <div class="flex justify-between items-center px-3 py-2 bg-[<%= product.panelcolor %>] text-[<%= product.textcolor %>]">
+              <div class="flex flex-col w-[100px] overflow-hidden">
+                <h3 class="font-semibold text-[13px] truncate">
+                  <%= product.name %>
+                </h3>
+                <p class="text-sm">₹ <%= product.price %>
+                </p>
+              </div>
+              <a class="w-8 h-8 flex items-center justify-center rounded-full bg-white text-black hover:bg-gray-200 transition"
+                href="/users/addtocart/<%= product._id %>" aria-label="Add <%= product.name %> to cart">
+                <i class="ri-add-line text-lg"></i>
+              </a>
+
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+  <script>
+  function sortProducts(value) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("sort", value);
+    window.location.href = url.toString();
+  }
+
+  function toggleFilter() {
+    const panel = document.getElementById("filterPanel");
+    panel.classList.toggle("hidden");
+  }
+</script>
+<%- include('./partials/footer') %> 

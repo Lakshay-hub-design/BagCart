@@ -1,0 +1,112 @@
+<%- include('./partials/header') %>
+
+<% if(success.length>0){ %>
+<div class="fixed top-5 left-1/2 transform -translate-x-1/2 p-3 rounded-md bg-blue-500 shadow-lg z-50">
+  <span class="text-white"><%= success %></span>
+</div>
+<% } %>
+
+<div class="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
+  <!-- Sidebar -->
+  <aside class="w-full lg:w-1/4 bg-white shadow px-6 py-8">
+    <nav class="flex flex-col gap-3">
+      <a href="/owners/admin" class="text-black-500 font-semibold">All Products</a>
+      <a href="/owners/create" class="text-black-500 font-semibold">Create New Product</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 px-6 py-10 bg-white shadow">
+    <h2 class="text-2xl font-bold mb-6">Create New Product</h2>
+
+    <form autocomplete="off" action="/products/create" method="post" enctype="multipart/form-data" class="space-y-8">
+      <!-- Product Details -->
+      <section>
+        <h3 class="text-lg font-semibold mb-4">Product Details</h3>
+        <div class="mb-4">
+          <label class="block mb-2 font-medium">Product Image</label>
+          <input id="image" name="image" type="file" class="block w-full border p-2 rounded">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input name="name" type="text" placeholder="Product Name" class="border p-2 rounded w-full">
+          <input name="price" type="text" placeholder="Product Price" class="border p-2 rounded w-full">
+          <input name="discount" type="text" placeholder="Discount Price" class="border p-2 rounded w-full">
+        </div>
+      </section>
+
+      <!-- Panel Customization -->
+      <section>
+        <h3 class="text-lg font-semibold mb-4">Panel Customization</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block mb-1 text-sm font-medium">Background Color</label>
+            <input name="bgcolor" type="color" value="#f5f5f5" class="border p-2 rounded w-full">
+          </div>
+          <div>
+            <label class="block mb-1 text-sm font-medium">Panel Color</label>
+            <input name="panelcolor" type="color" value="#ffffff" class="border p-2 rounded w-full">
+          </div>
+          <div>
+            <label class="block mb-1 text-sm font-medium">Text Color</label>
+            <input name="textcolor" type="color" value="#000000" class="border p-2 rounded w-full">
+          </div>
+        </div>
+      </section>
+
+      <!-- Preview Card -->
+      <div id="previewCard" class="hidden w-full md:w-[300px] rounded-md shadow-md overflow-hidden">
+        <div id="previewBg" class="w-full h-48 flex items-center justify-center">
+          <img id="previewImage" class="h-[10rem] object-contain" src="#" alt="Preview">
+        </div>
+        <div id="previewPanel" class="px-5 py-4 flex justify-between items-center">
+          <h3 id="previewText" class="text-xl font-semibold text-white">Product Name</h3>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <input type="submit" value="Create New Product"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded cursor-pointer">
+    </form>
+  </main>
+</div>
+
+<script>
+  const imageInput = document.getElementById("image");
+  const nameInput = document.querySelector("input[name='name']");
+  const bgColorInput = document.querySelector("input[name='bgcolor']");
+  const panelColorInput = document.querySelector("input[name='panelcolor']");
+  const textColorInput = document.querySelector("input[name='textcolor']");
+
+  const previewCard = document.getElementById("previewCard");
+  const previewImage = document.getElementById("previewImage");
+  const previewBg = document.getElementById("previewBg");
+  const previewPanel = document.getElementById("previewPanel");
+  const previewText = document.getElementById("previewText");
+
+  function updatePreview() {
+    previewBg.style.backgroundColor = bgColorInput.value || "#f3f4f6";
+    previewPanel.style.backgroundColor = panelColorInput.value || "#111827";
+    previewText.style.color = textColorInput.value || "#ffffff";
+    previewText.textContent = nameInput.value || "Product Name";
+  }
+
+  imageInput.addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        previewImage.src = e.target.result;
+        previewCard.classList.remove("hidden");
+        updatePreview();
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  [nameInput, bgColorInput, panelColorInput, textColorInput].forEach(input => {
+    input.addEventListener("input", updatePreview);
+  });
+</script>
+
+<%- include('./partials/footer') %>

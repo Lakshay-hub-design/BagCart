@@ -1,0 +1,42 @@
+<%- include('./partials/header') %>
+
+<div class="min-h-screen p-10 bg-gray-100">
+  <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-md p-8">
+    <h2 class="text-2xl font-bold mb-6">Your Orders</h2>
+
+    <% if (user.orders.length === 0) { %>
+      <p class="text-gray-600">You have not placed any orders yet.</p>
+    <% } else { %>
+      <% user.orders.forEach(order => { %>
+        <div class="p-4 border rounded-md mb-6 bg-white shadow">
+          <h3 class="text-lg font-semibold mb-2">Order on <%= new Date(order.date).toLocaleDateString() %></h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <% order.items.forEach(item => { %>
+              <div class="p-3 border rounded bg-gray-100">
+                <% if (item.imagePath) { %>
+                  <div class="w-24 h-24 bg-white rounded flex items-center justify-center overflow-hidden mb-2">
+                    <img 
+                      src="<%= item.imagePath %>" 
+                      alt="Product Image" 
+                      class="max-w-full max-h-full object-contain" 
+                      loading="lazy" 
+                    />
+                  </div>
+                <% } %>
+                <h4 class="font-medium"><%= item.name %></h4>
+                <p class="text-sm text-gray-700">
+                  Price: ₹<%= item.price %> - ₹<%= item.discount %> = ₹<%= item.price - item.discount %>
+                </p>
+              </div>
+            <% }) %>
+          </div>
+          <h4 class="text-right font-bold mt-2">Total: ₹ <%= order.totalAmount %></h4>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <a href="/users/account" class="mt-6 inline-block text-blue-600 hover:underline">&larr; Back to Account</a>
+  </div>
+</div>
+
+<%- include('./partials/footer') %>
