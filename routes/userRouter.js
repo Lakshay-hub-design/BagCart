@@ -160,7 +160,7 @@ router.post("/pay", isLoggedIn, async (req, res) => {
 
     if (!user || !user.cart || user.cart.length === 0) {
         req.flash("error", "Cart is empty.");
-        return res.redirect("/cart");
+        return res.redirect("/users/cart");
     }
 
     const total = user.cart.reduce((sum, item) => sum + item.price, 0);

@@ -1,13 +1,13 @@
 <%- include('./partials/header') %>
 
 <% if(success.length > 0){ %>
-<div class="absolute top-5 left-1/2 transform -translate-x-1/2 p-3 rounded-md bg-blue-500 z-50">
+<div id="cartPopup" class="absolute top-5 left-1/2 transform -translate-x-1/2 p-3 rounded-md bg-blue-500 z-50">
   <span class="text-white"><%= success %></span>
 </div>
 <% } %>
 
 <% if(error.length > 0){ %>
-<div class="absolute top-5 left-1/2 transform -translate-x-1/2 p-3 rounded-md bg-red-500 z-50">
+<div id="cartPopup" class="absolute top-5 left-1/2 transform -translate-x-1/2 p-3 rounded-md bg-red-500 z-50">
   <span class="text-white"><%= error %></span>
 </div>
 <% } %>
@@ -80,5 +80,18 @@
     </form>
   </div>
 </div>
+
+<script>
+      window.addEventListener("DOMContentLoaded", () => {
+    const popup = document.getElementById("cartPopup");
+    if (popup) {
+      setTimeout(() => {
+        popup.style.opacity = "0";
+        popup.style.transition = "opacity 0.5s ease";
+        setTimeout(() => popup.remove(), 500);
+      }, 2000);
+    }
+  });
+</script>
 
 <%- include('./partials/footer') %>

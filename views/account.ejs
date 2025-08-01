@@ -1,7 +1,7 @@
 <%- include('./partials/header') %>
 
 <% if (success.length > 0) { %>
-  <div class="fixed top-5 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-md shadow-lg z-50">
+  <div id="cartPopup" class="fixed top-5 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-md shadow-lg z-50">
     <%= success %>
   </div>
 <% } %>
@@ -66,5 +66,18 @@
     
   </div>
 </div>
+
+<script>
+      window.addEventListener("DOMContentLoaded", () => {
+    const popup = document.getElementById("cartPopup");
+    if (popup) {
+      setTimeout(() => {
+        popup.style.opacity = "0";
+        popup.style.transition = "opacity 0.5s ease";
+        setTimeout(() => popup.remove(), 500);
+      }, 2000);
+    }
+  });
+</script>
 
 <%- include('./partials/footer') %>
