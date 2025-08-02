@@ -1,10 +1,14 @@
 <%- include('./partials/header') %>
 
 <% if(success.length > 0){ %>
-<div id="cartPopup" class="absolute top-5 left-1/2 transform -translate-x-1/2 p-3 rounded-md bg-blue-500 z-50">
-  <span class="text-white"><%= success %></span>
-</div>
+  <div
+    id="cartPopup"
+    class="absolute top-5 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-md bg-blue-500 z-50 max-w-[90vw] text-center whitespace-nowrap overflow-hidden text-ellipsis"
+  >
+    <span class="text-white text-sm sm:text-base"><%= success %></span>
+  </div>
 <% } %>
+
 
 <% if(error.length > 0){ %>
 <div id="cartPopup" class="absolute top-5 left-1/2 transform -translate-x-1/2 p-3 rounded-md bg-red-500 z-50">
